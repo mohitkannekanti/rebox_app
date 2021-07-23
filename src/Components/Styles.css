@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h5 {
+  font-weight: 600 !important;
+}
+
+/* Text Related Styles */
+
+.text-center {
+  text-align: center;
+}
+.text-primary {
+  color: #00693b;
+}
+.text-secondary {
+  color: #277799;
+}
+
+/* End Text Related Styles */
+
+/* Font Related style */
+.f-600 {
+  font-weight: 600 !important;
+}
+
+/* End Font Related style */
+
+/* Margin Styles */
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+.mt-30 {
+  margin-top: 30px !important;
+}
+.mt-40 {
+  margin-top: 40px !important;
+}
+.mt-50 {
+  margin-top: 50px !important;
+}
+
+/* End Margin Styles */
+
+.box {
+  padding: 50px;
+  border-radius: 4px;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+  margin: auto;
+  /* max-width: 250px; */
+  box-shadow: rgba(0, 0, 0, 0.19) 2px 10px 30px,
+    rgba(0, 0, 0, 0.23) 0px 6px 30px;
+}
+.btn {
+  width: 100%;
+  padding: 10px;
+}
+.btn-primary {
+  background-color: #00693b !important;
+  color: #fff !important;
+}
+.btn-disable {
+  color: #fff !important;
+  background-color: #00693c4b !important;
+}
+.btn-due {
+  color: #fff !important;
+  background-color: #db2100 !important;
+}
+.btn-medium {
+  width: 300px !important;
+}
+.form-input {
+  margin-top: 30px !important;
+}
