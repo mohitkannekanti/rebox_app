@@ -23,7 +23,7 @@ function PaymentDetails() {
   return (
     <div className="paymentDetails-pane">
       <div className="box">
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <h5 className="text-primary">HID No</h5>
             <p>{inpObj.hiNo}</p>
@@ -57,13 +57,7 @@ function PaymentDetails() {
             <p>Rs. {inpObj.grandTotal}</p>
           </Grid>
         </Grid>
-        <Grid
-          container
-          spacing={3}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Grid container spacing={3} className="text-center">
           <Grid item xs={12}>
             <Alert severity="success">
               <AlertTitle>Payment Success</AlertTitle>

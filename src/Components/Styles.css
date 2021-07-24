@@ -77,8 +77,18 @@ h5 {
   background-color: #db2100 !important;
 }
 .btn-medium {
-  width: 250px;
+  width: 250px !important;
 }
 .form-input {
   margin-top: 30px !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .btn-medium {
+    width: 100% !important;
+  }
+
+  .box {
+    text-align: center;
+  }
 }
