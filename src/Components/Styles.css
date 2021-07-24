@@ -42,6 +42,9 @@ h5 {
 .mt-50 {
   margin-top: 50px !important;
 }
+.mb-30 {
+  margin-bottom: 30px !important;
+}
 
 /* End Margin Styles */
 
@@ -53,6 +56,7 @@ h5 {
   min-height: 300px;
   margin: auto;
   /* max-width: 250px; */
+  box-sizing: border-box;
   box-shadow: rgba(0, 0, 0, 0.19) 2px 10px 30px,
     rgba(0, 0, 0, 0.23) 0px 6px 30px;
 }
@@ -73,7 +77,7 @@ h5 {
   background-color: #db2100 !important;
 }
 .btn-medium {
-  width: 300px !important;
+  width: 250px;
 }
 .form-input {
   margin-top: 30px !important;
