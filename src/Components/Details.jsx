@@ -7,7 +7,7 @@ function Details(props) {
     hiNo: "D2340",
     plotNo: "D240",
     ptinNo: "15420ABCD",
-    hNo: "6-4-323/A",
+    houseNo: "6-4-323/A",
     ownerName: "John Deo",
     relationName: "James Wilson",
     builtUpArea: "500",
@@ -26,116 +26,110 @@ function Details(props) {
   };
   return (
     <div className="details-pane">
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <div className="box">
-          <Grid container spacing={3}>
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
+      <div className="box">
+        <Grid container spacing={3}>
+          <Grid xs={12}>
+            <table>
+              <tbody>
+                <tr>
+                  <th>HIN No.</th>
+                  <td>{inpObj.hiNo}</td>
+                </tr>
+                <tr>
+                  <th>Payment Status</th>
+                  <td>
+                    {paidStatus && paidStatus == "PAID" ? (
+                      <Button className="btn btn-primary btn-medium">
+                        PAID
+                      </Button>
+                    ) : (
+                      <Button className="btn btn-due btn-medium">DUE</Button>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Owner Name</th>
+                  <td>{inpObj.ownerName}</td>
+                </tr>
+                <tr>
+                  <th>S/o , W/o, D/o</th>
+                  <td>{inpObj.relationName}</td>
+                </tr>
+                <tr>
+                  <th>Resident Type</th>
+                  <td>{inpObj.residentType}</td>
+                </tr>
+                <tr>
+                  <th>House No</th>
+                  <td>{inpObj.houseNo}</td>
+                </tr>
+                <tr>
+                  <th>Plot No.</th>
+                  <td>{inpObj.plotNo}</td>
+                </tr>
+                <tr>
+                  <th>PTIN No.</th>
+                  <td>{inpObj.ptinNo}</td>
+                </tr>
+                <tr>
+                  <th>Built Up Area</th>
+                  <td>{inpObj.builtUpArea}</td>
+                </tr>
+                <tr>
+                  <th>Land Area</th>
+                  <td>{inpObj.landArea}</td>
+                </tr>
+                <tr>
+                  <th>House Tax Arears</th>
+                  <td>{inpObj.houseTaxArears}</td>
+                </tr>
+                <tr>
+                  <th>House Tax Current</th>
+                  <td>{inpObj.houseTaxCurrent}</td>
+                </tr>
+                <tr>
+                  <th>Library Tax Arears</th>
+                  <td>{inpObj.libraryTaxArears}</td>
+                </tr>
+                <tr>
+                  <th>Library Tax Current</th>
+                  <td>{inpObj.libraryTaxCurrent}</td>
+                </tr>
+                <tr>
+                  <th>Total Tax Arears</th>
+                  <td>{inpObj.totalTaxArears}</td>
+                </tr>
+                <tr>
+                  <th>Total Tax Current</th>
+                  <td>{inpObj.totalTaxCurrent}</td>
+                </tr>
+                <tr>
+                  <th>Grand Total</th>
+                  <td>{inpObj.grandTotal}</td>
+                </tr>
+              </tbody>
+            </table>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          className="mt-30 mb-30"
+        >
+          {paidStatus && paidStatus == "PAID" ? (
+            <Button className="btn btn-due btn-medium">Download Receipt</Button>
+          ) : (
+            <Button
+              className="btn btn-primary btn-medium"
+              onClick={handlePaymentRedirect}
             >
-              <Grid item>
-                <h5 className="text-primary">HID No</h5>
-                <p>{inpObj.hiNo}</p>
-              </Grid>
-              <Grid item className="text-center">
-                <p className="">Payment Status</p>
-                {paidStatus && paidStatus == "PAID" ? (
-                  <Button className="btn btn-primary">PAID</Button>
-                ) : (
-                  <Button className="btn btn-due">DUE</Button>
-                )}
-              </Grid>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Plot No</h5>
-              <p>{inpObj.plotNo}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>PTIN No.</h5>
-              <p>{inpObj.ptinNo}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>H No</h5>
-              <p>{inpObj.hNo}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Name of Owner</h5>
-              <p>{inpObj.ownerName}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>S/o, W/o, D/o</h5>
-              <p>{inpObj.relationName}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Built Up Area</h5>
-              <p>{inpObj.builtUpArea} Sq.yards</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Land Area</h5>
-              <p>{inpObj.landArea} Sq.yards</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5 className="text-primary">Type of Residence</h5>
-              <p>{inpObj.residentType}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>House Tax Arrears</h5>
-              <p>Rs. {inpObj.houseTaxArears}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>House Tax Present</h5>
-              <p>Rs. {inpObj.houseTaxCurrent}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Library Tax Arrears</h5>
-              <p>Rs. {inpObj.libraryTaxArears}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Library Tax Present</h5>
-              <p>Rs. {inpObj.libraryTaxCurrent}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Total Tax Arrears</h5>
-              <p>Rs. {inpObj.totalTaxArears}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Total Tax Present</h5>
-              <p>Rs. {inpObj.totalTaxCurrent}</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <h5>Grand Total</h5>
-              <p>Rs. {inpObj.grandTotal}</p>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            className="mt-30 mb-30"
-          >
-            {paidStatus && paidStatus == "PAID" ? (
-              <Button className="btn btn-due btn-medium">
-                Download Receipt
-              </Button>
-            ) : (
-              <Button
-                className="btn btn-primary btn-medium"
-                onClick={handlePaymentRedirect}
-              >
-                Click To pay
-              </Button>
-            )}
-          </Grid>
-        </div>
-      </Grid>
+              Click To pay
+            </Button>
+          )}
+        </Grid>
+      </div>
     </div>
   );
 }

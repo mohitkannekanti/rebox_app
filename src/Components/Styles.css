@@ -83,6 +83,26 @@ h5 {
   margin-top: 30px !important;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%;
+  align-items: center;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+th,
+td:hover {
+  cursor: pointer;
+}
+
+tr:nth-child(even) {
+  background-color: #00693c21;
+}
+
 @media only screen and (max-width: 600px) {
   .btn-medium {
     width: 100% !important;

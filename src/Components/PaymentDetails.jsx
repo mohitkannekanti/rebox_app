@@ -20,44 +20,45 @@ function PaymentDetails() {
     grandTotal: "3434.45",
     transcationReferenceNo: "2334838483848",
   });
+
   return (
     <div className="paymentDetails-pane">
       <div className="box">
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <h5 className="text-primary">HID No</h5>
-            <p>{inpObj.hiNo}</p>
+        <Grid container spacing={2} className="text-center">
+          <Grid xs={12}>
+            <table>
+              <tbody>
+                <tr>
+                  <th>HIN No.</th>
+                  <td>{inpObj.hiNo}</td>
+                </tr>
+                <tr>
+                  <th>Owner Name</th>
+                  <td>{inpObj.ownerName}</td>
+                </tr>
+                <tr>
+                  <th>Resident Type</th>
+                  <td>{inpObj.residentType}</td>
+                </tr>
+                <tr>
+                  <th>Transcation Reference No.</th>
+                  <td>{inpObj.transcationReferenceNo}</td>
+                </tr>
+                <tr>
+                  <th>Plot No.</th>
+                  <td>{inpObj.plotNo}</td>
+                </tr>
+                <tr>
+                  <th>PTIN No.</th>
+                  <td>{inpObj.ptinNo}</td>
+                </tr>
+                <tr>
+                  <th>Grand Total</th>
+                  <td>{inpObj.grandTotal}</td>
+                </tr>
+              </tbody>
+            </table>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <h5>Transaction Reference No</h5>
-            <p>{inpObj.transcationReferenceNo}</p>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <h5>Name of Owner</h5>
-            <p>{inpObj.ownerName}</p>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <h5>Plot No</h5>
-            <p>{inpObj.plotNo}</p>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <h5>PTIN No.</h5>
-            <p>{inpObj.ptinNo}</p>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <h5>H No</h5>
-            <p>{inpObj.hNo}</p>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <h5 className="text-primary">Type of Residence</h5>
-            <p>{inpObj.residentType}</p>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <h5>Grand Total</h5>
-            <p>Rs. {inpObj.grandTotal}</p>
-          </Grid>
-        </Grid>
-        <Grid container spacing={3} className="text-center">
           <Grid item xs={12}>
             <Alert severity="success">
               <AlertTitle>Payment Success</AlertTitle>
@@ -67,6 +68,7 @@ function PaymentDetails() {
             <Button className="btn btn-due btn-medium">Download Receipt</Button>
           </Grid>
         </Grid>
+        <Grid container spacing={3} className="text-center"></Grid>
       </div>
     </div>
   );
