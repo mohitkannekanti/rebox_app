@@ -125,7 +125,7 @@ function Details(props) {
               className="btn btn-primary btn-medium"
               onClick={handlePaymentRedirect}
             >
-              Click To pay
+              Click To Pay
             </Button>
           )}
         </Grid>
