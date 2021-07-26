@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
+import CustomModal from "./Custom/Modal";
 
 function Details(props) {
   const [paidStatus, setPaidStatus] = useState("DUE");
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [inpObj, setInptObj] = useState({
     hiNo: "D2340",
     plotNo: "D240",
@@ -23,6 +26,12 @@ function Details(props) {
   });
   const handlePaymentRedirect = () => {
     window.location.href = "/success";
+  };
+  const handlePaymentModalOpen = () => {
+    setIsOpen(true);
+  };
+  const handlePaymentModalClose = () => {
+    setIsOpen(false);
   };
   return (
     <div className="details-pane">
@@ -123,13 +132,21 @@ function Details(props) {
           ) : (
             <Button
               className="btn btn-primary btn-medium"
-              onClick={handlePaymentRedirect}
+              onClick={handlePaymentModalOpen}
             >
               Click To Pay
             </Button>
           )}
         </Grid>
       </div>
+      {paymentDialogOpen && (
+        <CustomModal
+          open={handlePaymentModalOpen}
+          close={handlePaymentModalClose}
+        >
+          <h1>jnfndjnfjdns</h1>
+        </CustomModal>
+      )}
     </div>
   );
 }
