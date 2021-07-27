@@ -132,7 +132,7 @@ function Details(props) {
           ) : (
             <Button
               className="btn btn-primary btn-medium"
-              onClick={handlePaymentModalOpen}
+              onClick={handlePaymentRedirect}
             >
               Click To Pay
             </Button>
