@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Search from "./Components/Search";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Container from "@material-ui/core/Container";
+import Header from "./Components/Header";
+import Details from "./Components/Details";
+import PaymentDetails from "./Components/PaymentDetails";
+import Login from "./Components/Admin/Login";
+import AdminDashboard from "./Components/Admin/Dashboard";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <div className="App">
+        <Header />
+        <Router>
+          <Route path="/" component={Search} exact />
+          <Route path="/details" component={Details} exact />
+          <Route path="/success" component={PaymentDetails} exact />
+          <Route path="/adminlogin" component={Login} exact />
+          <Route path="/dashboard" component={AdminDashboard} exact />
+        </Router>
+      </div>
+    </Container>
   );
 }
 
