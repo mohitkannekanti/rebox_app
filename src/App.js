@@ -7,6 +7,7 @@ import Header from "./Components/Header";
 import Details from "./Components/Details";
 import PaymentDetails from "./Components/PaymentDetails";
 import Login from "./Components/Admin/Login";
+import AdminDashboard from "./Components/Admin/Dashboard";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/details" component={Details} exact />
           <Route path="/success" component={PaymentDetails} exact />
           <Route path="/adminlogin" component={Login} exact />
+          <Route path="/dashboard" component={AdminDashboard} exact />
         </Router>
       </div>
     </Container>
