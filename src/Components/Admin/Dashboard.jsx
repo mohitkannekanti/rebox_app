@@ -252,21 +252,12 @@ function AdminDashboard(props) {
               Upload
             </Button>
           </label>
-          {/*  <Button
-            variant="contained"
-            color="default"
-            className="btn"
-            startIcon={<CloudUploadIcon />}
-            type="file"
-          >
-            Upload
-          </Button> */}
         </Grid>
-        <Grid item>
+        {/*  <Grid item>
           <Typography variant="h5" component="h5" className="text-primary">
             Admin Dashboard
           </Typography>
-        </Grid>
+        </Grid> */}
         <Grid item>
           <Button
             variant="contained"
