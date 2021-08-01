@@ -25,6 +25,15 @@ function PaymentDetails() {
     <div className="paymentDetails-pane">
       <div className="box">
         <Grid container spacing={2} className="text-center">
+          <Grid item xs={12}>
+            <Typography
+              className=" text-center text-primary"
+              variant="h5"
+              component="h5"
+            >
+              Payment Details
+            </Typography>
+          </Grid>
           <Grid xs={12}>
             <table>
               <tbody>

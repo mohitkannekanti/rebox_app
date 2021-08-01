@@ -47,7 +47,9 @@ h5 {
 }
 
 /* End Margin Styles */
-
+.header {
+  cursor: pointer;
+}
 .box {
   padding: 50px;
   border-radius: 4px;

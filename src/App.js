@@ -16,6 +16,7 @@ function App() {
         <Header />
         <Router>
           <Route path="/" component={Search} exact />
+          {/* <Route path="/search" component={Search} exact /> */}
           <Route path="/details" component={Details} exact />
           <Route path="/success" component={PaymentDetails} exact />
           <Route path="/adminlogin" component={Login} exact />

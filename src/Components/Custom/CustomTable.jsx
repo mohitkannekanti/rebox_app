@@ -16,6 +16,7 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import PropTypes from "prop-types";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const CustomTable = ({ data, columns, ...rest }) => {
   return (
@@ -23,6 +24,14 @@ const CustomTable = ({ data, columns, ...rest }) => {
       <MaterialTable
         columns={columns}
         data={data}
+        localization={{
+          pagination: {
+            labelDisplayedRows: "{from}-{to} of {count}",
+          },
+          body: {
+            emptyDataSourceMessage: "No records to display",
+          },
+        }}
         options={{
           exportButton: true,
           exportFileName: "Export Table",
@@ -32,6 +41,13 @@ const CustomTable = ({ data, columns, ...rest }) => {
           pageSizeOptions: [10, 20, 30, 50, 75, 100],
           toolbar: true,
           paging: true,
+        }}
+        components={{
+          OverlayLoading: (props) => (
+            <>
+              <LinearProgress />
+            </>
+          ),
         }}
       />
     </>
