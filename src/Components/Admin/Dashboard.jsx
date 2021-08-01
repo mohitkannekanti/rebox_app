@@ -92,7 +92,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 98347879995,
+    mobileNumber: 9834789995,
   },
   {
     hidNo: "DIN 2323",
