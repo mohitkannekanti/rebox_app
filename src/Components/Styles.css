@@ -13,10 +13,10 @@ h5 {
   text-align: center;
 }
 .text-primary {
-  color: #00693b;
+  color: #00693c;
 }
 .text-secondary {
-  color: #277799;
+  color: #016893;
 }
 
 /* End Text Related Styles */
@@ -65,7 +65,11 @@ h5 {
   padding: 10px;
 }
 .btn-primary {
-  background-color: #00693b !important;
+  background-color: #00693c !important;
+  color: #fff !important;
+}
+.btn-secondary {
+  background-color: #016893 !important;
   color: #fff !important;
 }
 .btn-disable {
@@ -101,6 +105,10 @@ td:hover {
 
 tr:nth-child(even) {
   /* background-color: #00693c21; */
+}
+
+.MuiTableCell-root {
+  padding: 8px !important;
 }
 
 @media only screen and (max-width: 600px) {

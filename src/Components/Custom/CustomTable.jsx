@@ -25,7 +25,13 @@ const CustomTable = ({ data, columns, ...rest }) => {
         data={data}
         options={{
           exportButton: true,
+          exportFileName: "Export Table",
           showTitle: false,
+          search: true,
+          pageSize: 10,
+          pageSizeOptions: [10, 20, 30, 50, 75, 100],
+          toolbar: true,
+          paging: true,
         }}
       />
     </>

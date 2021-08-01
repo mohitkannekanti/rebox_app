@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import CustomTable from "../Custom/CustomTable";
-import { Grid, Button } from "@material-ui/core";
+import {
+  Grid,
+  Button,
+  Typography,
+  makeStyles,
+  Input,
+  InputLabel,
+  InputAdornment,
+} from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const list = [
   {
     hidNo: "DIN 2323",
     status: "Paid",
-    nameOfOwner: "James Wilson",
+    nameOfOwner: "James Stephen",
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
@@ -16,20 +25,83 @@ const list = [
   {
     hidNo: "DIN 2323",
     status: "Paid",
-    nameOfOwner: "James Wilson",
+    nameOfOwner: "Robert Wilson",
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834343435,
   },
   {
     hidNo: "DIN 2323",
     status: "DUE",
-    nameOfOwner: "James Wilson",
+    nameOfOwner: "Srinivasulu A",
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834343436,
+  },
+  {
+    hidNo: "DIN 2323",
+    status: "Paid",
+    nameOfOwner: "Vijay Malya",
+    typeOfResidence: "Residental",
+    ptinNo: 33434,
+    amount: 4000,
+    mobileNumber: 9834787999,
+  },
+  {
+    hidNo: "DIN 2323",
+    status: "Paid",
+    nameOfOwner: "Ajay Howlya",
+    typeOfResidence: "Residental",
+    ptinNo: 33434,
+    amount: 4000,
+    mobileNumber: 9834787991,
+  },
+  {
+    hidNo: "DIN 2323",
+    status: "Due",
+    nameOfOwner: "Stephen Yoki",
+    typeOfResidence: "Residental",
+    ptinNo: 33434,
+    amount: 4000,
+    mobileNumber: 9834787992,
+  },
+  {
+    hidNo: "DIN 2323",
+    status: "Paid",
+    nameOfOwner: "Mike Tike",
+    typeOfResidence: "Residental",
+    ptinNo: 33434,
+    amount: 4000,
+    mobileNumber: 9834787993,
+  },
+  {
+    hidNo: "DIN 2323",
+    status: "Paid",
+    nameOfOwner: "John Wilson",
+    typeOfResidence: "Residental",
+    ptinNo: 33434,
+    amount: 4000,
+    mobileNumber: 9834787994,
+  },
+  {
+    hidNo: "DIN 2323",
+    status: "Paid",
+    nameOfOwner: "Wilson",
+    typeOfResidence: "Residental",
+    ptinNo: 33434,
+    amount: 4000,
+    mobileNumber: 98347879995,
+  },
+  {
+    hidNo: "DIN 2323",
+    status: "Paid",
+    nameOfOwner: "Renuka P",
+    typeOfResidence: "Residental",
+    ptinNo: 33434,
+    amount: 4000,
+    mobileNumber: 9834787996,
   },
   {
     hidNo: "DIN 2323",
@@ -38,70 +110,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787997,
   },
   {
     hidNo: "DIN 2323",
@@ -110,7 +119,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787998,
   },
   {
     hidNo: "DIN 2323",
@@ -119,7 +128,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787990,
   },
   {
     hidNo: "DIN 2323",
@@ -128,7 +137,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787900,
   },
   {
     hidNo: "DIN 2323",
@@ -137,7 +146,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787901,
   },
   {
     hidNo: "DIN 2323",
@@ -146,7 +155,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787902,
   },
   {
     hidNo: "DIN 2323",
@@ -155,7 +164,7 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787903,
   },
   {
     hidNo: "DIN 2323",
@@ -164,11 +173,23 @@ const list = [
     typeOfResidence: "Residental",
     ptinNo: 33434,
     amount: 4000,
-    mobileNumber: 9834343434,
+    mobileNumber: 9834787904,
   },
 ];
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+  input: {
+    display: "none",
+  },
+}));
+
 function AdminDashboard(props) {
+  const classes = useStyles();
   const [data, setData] = useState(list);
   const columns = [
     { title: "HID No", field: "hidNo" },
@@ -192,6 +213,10 @@ function AdminDashboard(props) {
     setData(list);
   }, []);
 
+  const handleLogout = () => {
+    window.location.href = "/adminlogin";
+  };
+
   return (
     <div className="admin-dashboard">
       <Grid
@@ -202,17 +227,53 @@ function AdminDashboard(props) {
         className="mt-30 "
       >
         <Grid item>
-          <Button
+          <input
+            accept="image/*"
+            className={classes.input}
+            id="upload_excel"
+            name="upload_excel"
+            type="file"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <CloudUploadIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <label htmlFor="contained-button-file">
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<CloudUploadIcon />}
+              component="span"
+              className="btn btn-secondary"
+            >
+              Upload
+            </Button>
+          </label>
+          {/*  <Button
             variant="contained"
             color="default"
             className="btn"
             startIcon={<CloudUploadIcon />}
+            type="file"
           >
             Upload
-          </Button>
+          </Button> */}
         </Grid>
         <Grid item>
-          <Button variant="contained" className="btn btn-primary">
+          <Typography variant="h5" component="h5" className="text-primary">
+            Admin Dashboard
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            className="btn btn-primary"
+            onClick={handleLogout}
+            endIcon={<ExitToAppIcon />}
+          >
             Logout
           </Button>
         </Grid>
