@@ -25,6 +25,7 @@ function Login() {
 
   const handleAdminLogin = () => {
     console.log("login clicked");
+    window.location.href = "/dashboard";
   };
 
   const handleValidation = () => {
