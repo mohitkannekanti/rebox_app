@@ -1,14 +1,17 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
 import PropTypes from "prop-types";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
 
 const styles = (theme) => ({
   root: {
@@ -23,45 +26,31 @@ const styles = (theme) => ({
   },
 });
 
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
-
 const CustomModal = ({
   handleOpen,
   handleClose,
-  title,
-  subTitle,
+  dialogTile,
   children,
+  actions,
+  ...props
 }) => {
+  console.log("props");
   return (
     <>
       <Dialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={handleOpen}
+        aria-labelledby="responsive-dialog-title"
       >
-        <DialogContent dividers>{children}</DialogContent>
+        <DialogTitle id="responsive-dialog-title">
+          {dialogTile}
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>{children}</DialogContent>
+        <DialogActions>{actions}</DialogActions>
       </Dialog>
     </>
   );
@@ -70,8 +59,8 @@ const CustomModal = ({
 export default CustomModal;
 
 CustomModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  handleOpen: PropTypes.bool.isRequired,
   children: PropTypes.element.isRequired,
-  isClose: PropTypes.bool.isRequired,
+  handleClose: PropTypes.bool.isRequired,
+  dialogTile: PropTypes.string,
 };

@@ -33,16 +33,17 @@ function Details(props) {
     window.location.href = "/success";
   };
   const handlePaymentModalOpen = () => {
-    setIsOpen(true);
+    setPaymentDialogOpen(true);
   };
   const handlePaymentModalClose = () => {
-    setIsOpen(false);
+    setPaymentDialogOpen(false);
   };
   const handleClose = () => {
     setTimeout(function () {
       setIsLoading(false);
     }, 5000);
   };
+
   return (
     <div className="details-pane">
       {isLoading && isLoading ? (
@@ -159,6 +160,7 @@ function Details(props) {
             ) : (
               <Button
                 className="btn btn-primary btn-medium"
+                // onClick={handlePaymentModalOpen}
                 onClick={handlePaymentRedirect}
               >
                 Click To Pay
@@ -169,10 +171,10 @@ function Details(props) {
       )}
       {paymentDialogOpen && (
         <CustomModal
-          open={handlePaymentModalOpen}
-          close={handlePaymentModalClose}
+          handleOpen={handlePaymentModalOpen}
+          handleClose={handlePaymentModalClose}
         >
-          <h1>jnfndjnfjdns</h1>
+          <h1>Modal Open</h1>
         </CustomModal>
       )}
     </div>

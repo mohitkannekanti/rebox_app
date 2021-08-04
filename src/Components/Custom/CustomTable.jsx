@@ -18,7 +18,7 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import PropTypes from "prop-types";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-const CustomTable = ({ data, columns, ...rest }) => {
+const CustomTable = ({ data, columns, ...props }) => {
   return (
     <>
       <MaterialTable

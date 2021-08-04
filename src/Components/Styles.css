@@ -85,6 +85,9 @@ h5 {
 .btn-medium {
   width: 250px !important;
 }
+.btn-small {
+  width: 100px !important;
+}
 .form-input {
   margin-top: 30px !important;
 }
@@ -111,6 +114,48 @@ tr:nth-child(even) {
 
 .MuiTableCell-root {
   padding: 8px !important;
+}
+
+/* Modal Box  */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+.modal-body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+.modal-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: center;
+  padding: 10px;
+}
+.close-icon {
+  cursor: pointer;
+}
+
+.otp-input {
+  border: none;
+  border-bottom: 1px solid #000 !important;
+  border-radius: 0;
+  padding: 15px;
+  font-weight: 600;
+}
+.otp-input:focus {
+  outline: none;
 }
 
 @media only screen and (max-width: 600px) {
