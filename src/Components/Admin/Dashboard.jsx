@@ -224,7 +224,7 @@ function AdminDashboard(props) {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        className="mt-30 "
+        className="mt-20 "
       >
         <Grid item>
           <input
