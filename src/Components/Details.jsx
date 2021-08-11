@@ -101,7 +101,6 @@ function Details(props) {
     updatePropertyStatusApi(updateData)
       .then(async (res) => {
         if (res.code === 1004) {
-          alert("paydone");
           setSnackBarObj({
             open: !setSnackBarObj.open,
             title: "success",
