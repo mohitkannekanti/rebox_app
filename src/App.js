@@ -8,6 +8,7 @@ import Details from "./Components/Details";
 import PaymentDetails from "./Components/PaymentDetails";
 import Login from "./Components/Admin/Login";
 import AdminDashboard from "./Components/Admin/Dashboard";
+import NotFound from "./Components/NotFound";
 
 function App() {
   return (
@@ -15,12 +16,15 @@ function App() {
       <div className="App">
         <Header />
         <Router>
-          <Route path="/" component={Search} exact />
-          {/* <Route path="/search" component={Search} exact /> */}
-          <Route path="/details" component={Details} exact />
-          <Route path="/success" component={PaymentDetails} exact />
-          <Route path="/adminlogin" component={Login} exact />
-          <Route path="/dashboard" component={AdminDashboard} exact />
+          <Switch>
+            <Route path="/" component={Search} exact />
+            {/* <Route path="/search" component={Search} exact /> */}
+            <Route path="/details" component={Details} exact />
+            <Route path="/success" component={PaymentDetails} exact />
+            <Route path="/adminlogin" component={Login} exact />
+            <Route path="/dashboard" component={AdminDashboard} exact />
+            <Route component={NotFound} exact />
+          </Switch>
         </Router>
       </div>
     </Container>

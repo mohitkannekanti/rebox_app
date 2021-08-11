@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CustomizedSnackbars(props) {
-  console.log("snack bar", props);
   const classes = useStyles();
 
   return (

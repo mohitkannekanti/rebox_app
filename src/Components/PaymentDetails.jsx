@@ -8,18 +8,36 @@ import {
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
-function PaymentDetails() {
-  const [paidStatus, setPaidStatus] = useState("PAID");
+function PaymentDetails(props) {
+  const [paidStatus, setPaidStatus] = useState(" ");
   const [inpObj, setInptObj] = useState({
-    hiNo: "D2340",
-    plotNo: "D240",
-    ptinNo: "15420ABCD",
-    hNo: "6-4-323/A",
-    ownerName: "John Deo",
-    residentType: "Residental",
-    grandTotal: "3434.45",
-    transcationReferenceNo: "2334838483848",
+    hiNo: "",
+    plotNo: "",
+    ptinNo: "",
+    houseNo: "",
+    ownerName: "",
+    residentType: "",
+    grandTotal: "",
+    transcationReferenceNo: "",
   });
+
+  useEffect(() => {
+    const data = props.location.state.data[0];
+    if (data) {
+      setInptObj({
+        ...inpObj,
+        hiNo: data.hid,
+        plotNo: data.plot_no,
+        ptinNo: data.asmtno_ptinno,
+        houseNo: data.house_no,
+        ownerName: data.name_of_owner,
+        residentType: "Residental",
+        grandTotal: data.grand_total,
+        transcationReferenceNo: data.transaction_reference_number,
+      });
+      setPaidStatus(data.payment_status_name);
+    }
+  }, []);
 
   return (
     <div className="paymentDetails-pane">

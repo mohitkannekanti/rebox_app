@@ -27,7 +27,6 @@ function Login() {
 
   const handleInputChange = (e, name) => {
     const value = e.target.value;
-    console.log(name, value, "inputs");
     setInputObj({ ...inputObj, [name]: value });
   };
 
@@ -40,7 +39,6 @@ function Login() {
     adminLoginApi(loginObj)
       .then(async (res) => {
         setIsLoading(false);
-        console.log("res", res);
         if (res.code === 1014) {
           setSnackBarObj({
             open: !setSnackBarObj.open,
@@ -62,8 +60,7 @@ function Login() {
           title: "error",
           message: "Invalid Credentials",
         });
-        // alert(err.message);
-        console.log(err, "err");
+        console.error(err, "err");
       });
   };
 

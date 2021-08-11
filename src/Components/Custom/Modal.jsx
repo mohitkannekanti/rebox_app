@@ -34,7 +34,6 @@ const CustomModal = ({
   actions,
   ...props
 }) => {
-  console.log("props");
   return (
     <>
       <Dialog
