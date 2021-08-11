@@ -11,7 +11,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "material-table": "^1.69.3",
-    "proxy": "https://reboxx-api.herokuapp.com/v1/api",
+    "proxy": "https://reboxx-api.herokuapp.com/v1/api/",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-otp-input": "^2.4.0",
