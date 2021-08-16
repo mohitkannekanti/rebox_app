@@ -13,171 +13,6 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { getAllPropertiesDataApi } from "../../Api/Main.api";
 
-const list = [
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Stephen",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343434,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "Robert Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343435,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "DUE",
-    nameOfOwner: "Srinivasulu A",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834343436,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "Vijay Malya",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787999,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "Ajay Howlya",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787991,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Due",
-    nameOfOwner: "Stephen Yoki",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787992,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "Mike Tike",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787993,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "John Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787994,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834789995,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "Renuka P",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787996,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787997,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787998,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787990,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787900,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787901,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787902,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "James Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787903,
-  },
-  {
-    hidNo: "DIN 2323",
-    status: "Paid",
-    nameOfOwner: "Raja Wilson",
-    typeOfResidence: "Residental",
-    ptinNo: 33434,
-    amount: 4000,
-    mobileNumber: 9834787904,
-  },
-];
-
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -194,6 +29,19 @@ function AdminDashboard(props) {
   const [data, setData] = useState([]);
   const columns = [
     { title: "HID No", field: "hid" },
+    {
+      title: "Status",
+      field: "payment_status_name",
+      render: (row) => (
+        <Button
+          className={
+            row.payment_status_name === "Paid" ? " btn-primary" : "btn-due"
+          }
+        >
+          {row.payment_status_name}
+        </Button>
+      ),
+    },
     { title: "Village Name", field: "village_name" },
     { title: "Mandal Name", field: "mandal_name" },
     { title: "District Name", field: "district_name" },
@@ -212,21 +60,14 @@ function AdminDashboard(props) {
     { title: "Total tax arrears", field: "total_tax_arrears" },
     { title: "Total tax Current", field: "total_tax_present" },
     { title: "Amount (in ₹)", field: "grand_total" },
-
     {
-      title: "Status",
-      field: "payment_status_name",
-      render: (row) => (
-        <Button
-          className={
-            row.payment_status_name === "Paid" ? " btn-primary" : "btn-due"
-          }
-        >
-          {row.payment_status_name}
-        </Button>
-      ),
+      title: "Payment Date",
+      field: "payment_date",
+      type: "date",
+      dateSetting: {
+        format: "dd/MM/yyyy h:mm a",
+      },
     },
-    { title: "Payment Date", field: "payment_date" },
 
     /* { title: "Type of Residence", field: "typeOfResidence" }, */
   ];

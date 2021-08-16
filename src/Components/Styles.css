@@ -107,13 +107,26 @@ th,
 td:hover {
   cursor: pointer;
 }
-
-tr:nth-child(even) {
-  /* background-color: #00693c21; */
+.receipt-format {
+  font-size: 12px;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
-
+.d-block {
+  display: block;
+}
+.d-none {
+  display: none;
+}
+.receipt-format table {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
 .MuiTableCell-root {
   padding: 8px !important;
+}
+#d-none {
+  display: none;
 }
 
 /* Modal Box  */

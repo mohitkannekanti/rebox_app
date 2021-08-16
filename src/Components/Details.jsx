@@ -6,12 +6,17 @@ import * as master from "../Api/MasterData.api";
 import { updatePropertyStatusApi } from "../Api/Main.api";
 import CustomSnackbar from "./Custom/CustomSnackbar";
 import { useHistory } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import Logo from "../Images/Logo";
 
 function Details(props) {
   const [paidStatus, setPaidStatus] = useState("");
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [paymentDate, setPaymentDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
+  const [downloadReceipt, setDownloadReceipt] = useState(false);
   const [snackBarObj, setSnackBarObj] = useState({
     open: false,
     title: "",
@@ -27,6 +32,7 @@ function Details(props) {
     relationName: " ",
     builtUpArea: " ",
     landArea: " ",
+    mobileNumber: "",
     residentType: " ",
     houseTaxArears: " ",
     houseTaxCurrent: " ",
@@ -35,11 +41,14 @@ function Details(props) {
     totalTaxArears: " ",
     totalTaxCurrent: " ",
     grandTotal: " ",
+    amountPaid: " ",
+    transactionRefNo: " ",
   });
 
   useEffect(() => {
     const data = props.location.state.data;
     if (data) {
+      console.log("data", data);
       setInptObj({
         ...inpObj,
         hiNo: data.hid,
@@ -58,8 +67,11 @@ function Details(props) {
         totalTaxArears: data.total_tax_arrears,
         totalTaxCurrent: data.total_tax_present,
         grandTotal: data.grand_total,
+        mobileNumber: data.phone_number,
+        transactionRefNo: data.transaction_reference_number,
       });
       setPaidStatus(data.payment_status_name);
+      setPaymentDate(data.payment_date);
     }
   }, []);
 
@@ -82,12 +94,8 @@ function Details(props) {
       });
   };
   const handlePaymentRedirect = (e) => {
-    e.preventDefault();
-    if (paidStatus === "Paid") {
-      // paymentDataUpdate();
-    } else {
-      paymentDataUpdate();
-    }
+    paymentDataUpdate();
+
     // window.location.href = "/success";
   };
 
@@ -95,7 +103,7 @@ function Details(props) {
     let transactionReference = new Date().valueOf();
     let updateData = {
       hid: inpObj.hiNo,
-      payment_status_id: "6",
+      payment_status_id: "5",
       transaction_reference: transactionReference,
     };
     updatePropertyStatusApi(updateData)
@@ -142,6 +150,21 @@ function Details(props) {
     }, 5000);
   };
 
+  const generatePdf = () => {
+    setDownloadReceipt(true);
+    const divToDisplay = document.getElementById("downloadContent");
+    console.log("divToDisplay", divToDisplay);
+    html2canvas(divToDisplay).then((canvas) => {
+      const dataURL = canvas.toDataURL();
+      const pdf = new jsPDF("p", "mm", "a4");
+      pdf.addImage(dataURL, "JPEG", 10, 10, 0, 0);
+
+      pdf.save(inpObj.hiNo + "_Receipt" + `.pdf`);
+    });
+  };
+
+  console.log("downloadReceipt", downloadReceipt);
+
   return (
     <div className="details-pane">
       {snackBarObj.title && snackBarObj.open ? (
@@ -162,11 +185,11 @@ function Details(props) {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Typography
-                className=" text-center text-primary"
+                className=" text-center text-secondary"
                 variant="h5"
                 component="h5"
               >
-                Details
+                Property Details
               </Typography>
             </Grid>
             <Grid xs={12}>
@@ -259,7 +282,7 @@ function Details(props) {
             alignItems="center"
             className="mt-30 mb-30"
           >
-            <Button
+            {/*   <Button
               onClick={(e) => handlePaymentRedirect(e)}
               className={`btn btn-medium ${
                 paidStatus === "Paid" ? "btn-due" : " btn-primary "
@@ -269,10 +292,10 @@ function Details(props) {
               }
             >
               {paidStatus === "Paid" ? "Download Receipt" : " Click To Pay"}
-            </Button>
+            </Button> */}
 
-            {/*  {paidStatus && paidStatus == "PAID" ? (
-              <Button className="btn btn-due btn-medium">
+            {paidStatus && paidStatus == "Paid" ? (
+              <Button className="btn btn-due btn-medium" onClick={generatePdf}>
                 Download Receipt
               </Button>
             ) : (
@@ -283,7 +306,7 @@ function Details(props) {
               >
                 Click To Pay
               </Button>
-            )} */}
+            )}
           </Grid>
         </div>
       )}
@@ -295,6 +318,62 @@ function Details(props) {
           <h1>Modal Open</h1>
         </CustomModal>
       )}
+
+      <div id="downloadContent">
+        <div
+          className={`text-center  ${
+            downloadReceipt && downloadReceipt ? "d-block" : "d-none"
+          }`}
+        >
+          <div className="text-center">
+            <img src="logo.png" height={80} width={80} />
+          </div>
+          <div className="receipt-format">
+            <h3 className="text-center">Receipt</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <th>HIN No.</th>
+                  <td>{inpObj.hiNo}</td>
+                </tr>
+                <tr>
+                  <th>Name of the Owner</th>
+                  <td>{inpObj.ownerName}</td>
+                </tr>
+                <tr>
+                  <th>Mobile Number</th>
+                  <td>{inpObj.mobileNumber}</td>
+                </tr>
+
+                <tr>
+                  <th>House No</th>
+                  <td>{inpObj.houseNo}</td>
+                </tr>
+                <tr>
+                  <th>Plot No.</th>
+                  <td>{inpObj.plotNo}</td>
+                </tr>
+                <tr>
+                  <th>Payment Status</th>
+                  <td>{paidStatus}</td>
+                </tr>
+                <tr>
+                  <th>Transaction Reference No</th>
+                  <td>{inpObj.transactionRefNo}</td>
+                </tr>
+                {/*  <tr>
+                <th>Payment Date</th>
+                <td>{paymentDate}</td>
+              </tr> */}
+                <tr>
+                  <th>Grand Total</th>
+                  <td>{inpObj.grandTotal}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

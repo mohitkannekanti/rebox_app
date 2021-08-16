@@ -263,7 +263,7 @@ const Search = (props) => {
           // btnValue="Submit"
         >
           <div className="modal-header">
-            <h4 className="text-primary">Enter OTP</h4>
+            <h4 className="text-secondary">Enter OTP</h4>
             <span className="close-icon" onClick={handleClose}>
               <CloseIcon />
             </span>

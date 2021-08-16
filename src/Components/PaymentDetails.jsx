@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { jsPDF } from "jspdf";
 
 function PaymentDetails(props) {
   const [paidStatus, setPaidStatus] = useState(" ");
@@ -38,6 +39,15 @@ function PaymentDetails(props) {
       setPaidStatus(data.payment_status_name);
     }
   }, []);
+
+  const downloadReceipt = () => {
+    var doc = new jsPDF();
+    doc.setFontSize(22);
+    doc.text("This is a title", 20, 20);
+
+    doc.setFontSize(16);
+    doc.text("This is some normal sized text underneath.", 20, 30);
+  };
 
   return (
     <div className="paymentDetails-pane">
@@ -92,7 +102,12 @@ function PaymentDetails(props) {
             </Alert>
           </Grid>
           <Grid item xs={12}>
-            <Button className="btn btn-due btn-medium">Download Receipt</Button>
+            <Button
+              className="btn btn-due btn-medium"
+              onClick={downloadReceipt}
+            >
+              Download Receipt
+            </Button>
           </Grid>
         </Grid>
         <Grid container spacing={3} className="text-center"></Grid>
