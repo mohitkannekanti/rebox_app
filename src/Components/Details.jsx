@@ -6,9 +6,10 @@ import * as master from "../Api/MasterData.api";
 import { updatePropertyStatusApi } from "../Api/Main.api";
 import CustomSnackbar from "./Custom/CustomSnackbar";
 import { useHistory } from "react-router-dom";
-import { jsPDF } from "jspdf";
+import jsPDF, { jsPDF as JsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Logo from "../Images/Logo";
+import DownloadReceipt from "./DownloadReceipt";
 
 function Details(props) {
   const [paidStatus, setPaidStatus] = useState("");
@@ -44,7 +45,6 @@ function Details(props) {
     amountPaid: " ",
     transactionRefNo: " ",
   });
-
   useEffect(() => {
     const data = props.location.state.data;
     if (data) {
@@ -150,20 +150,47 @@ function Details(props) {
     }, 5000);
   };
 
-  const generatePdf = () => {
+  const clickForPdf = () => {
     setDownloadReceipt(true);
-    const divToDisplay = document.getElementById("downloadContent");
-    console.log("divToDisplay", divToDisplay);
-    html2canvas(divToDisplay).then((canvas) => {
-      const dataURL = canvas.toDataURL();
-      const pdf = new jsPDF("p", "mm", "a4");
-      pdf.addImage(dataURL, "JPEG", 10, 10, 0, 0);
-
-      pdf.save(inpObj.hiNo + "_Receipt" + `.pdf`);
-    });
+    generatePdf();
   };
 
-  console.log("downloadReceipt", downloadReceipt);
+  const generatePdf = () => {
+    const divToDisplay = document.getElementById("downloadContent");
+    console.log(divToDisplay, "div");
+    if (divToDisplay != null) {
+      html2canvas(divToDisplay).then((canvas) => {
+        const dataURL = canvas.toDataURL();
+        const pdf = new jsPDF("p", "mm", "a4");
+        pdf.addImage(dataURL, "PNG", -40, 0, 0, 0);
+        const pageCount = pdf.internal.getNumberOfPages();
+
+        // For each page, print the page number and the total pages
+        for (var i = 1; i <= pageCount; i++) {
+          pdf.setPage(i);
+          pdf.addFont("ArialMS", "Arial", "normal");
+          pdf.setFont("Arial");
+          pdf.setFontSize(10);
+          pdf.text(
+            "This is an auto generated receipt. Do not require any signature",
+            50,
+            270,
+            null,
+            null
+          );
+          pdf.text(
+            "For any Queries. Reach out spport@rebox.com",
+            50,
+            275,
+            null,
+            null
+          );
+        }
+        setDownloadReceipt(false);
+        pdf.save(inpObj.hiNo + "_Receipt" + `.pdf`);
+      });
+    }
+  };
 
   return (
     <div className="details-pane">
@@ -282,26 +309,13 @@ function Details(props) {
             alignItems="center"
             className="mt-30 mb-30"
           >
-            {/*   <Button
-              onClick={(e) => handlePaymentRedirect(e)}
-              className={`btn btn-medium ${
-                paidStatus === "Paid" ? "btn-due" : " btn-primary "
-              }`}
-              name={
-                paidStatus === "Paid" ? "download_receipt" : " click_to_pay "
-              }
-            >
-              {paidStatus === "Paid" ? "Download Receipt" : " Click To Pay"}
-            </Button> */}
-
             {paidStatus && paidStatus == "Paid" ? (
-              <Button className="btn btn-due btn-medium" onClick={generatePdf}>
+              <Button className="btn btn-due btn-medium" onClick={clickForPdf}>
                 Download Receipt
               </Button>
             ) : (
               <Button
                 className="btn btn-primary btn-medium"
-                // onClick={handlePaymentModalOpen}
                 onClick={handlePaymentRedirect}
               >
                 Click To Pay
@@ -310,70 +324,7 @@ function Details(props) {
           </Grid>
         </div>
       )}
-      {paymentDialogOpen && (
-        <CustomModal
-          handleOpen={handlePaymentModalOpen}
-          handleClose={handlePaymentModalClose}
-        >
-          <h1>Modal Open</h1>
-        </CustomModal>
-      )}
-
-      <div id="downloadContent">
-        <div
-          className={`text-center  ${
-            downloadReceipt && downloadReceipt ? "d-block" : "d-none"
-          }`}
-        >
-          <div className="text-center">
-            <img src="logo.png" height={80} width={80} />
-          </div>
-          <div className="receipt-format">
-            <h3 className="text-center">Receipt</h3>
-            <table>
-              <tbody>
-                <tr>
-                  <th>HIN No.</th>
-                  <td>{inpObj.hiNo}</td>
-                </tr>
-                <tr>
-                  <th>Name of the Owner</th>
-                  <td>{inpObj.ownerName}</td>
-                </tr>
-                <tr>
-                  <th>Mobile Number</th>
-                  <td>{inpObj.mobileNumber}</td>
-                </tr>
-
-                <tr>
-                  <th>House No</th>
-                  <td>{inpObj.houseNo}</td>
-                </tr>
-                <tr>
-                  <th>Plot No.</th>
-                  <td>{inpObj.plotNo}</td>
-                </tr>
-                <tr>
-                  <th>Payment Status</th>
-                  <td>{paidStatus}</td>
-                </tr>
-                <tr>
-                  <th>Transaction Reference No</th>
-                  <td>{inpObj.transactionRefNo}</td>
-                </tr>
-                {/*  <tr>
-                <th>Payment Date</th>
-                <td>{paymentDate}</td>
-              </tr> */}
-                <tr>
-                  <th>Grand Total</th>
-                  <td>{inpObj.grandTotal}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      {downloadReceipt && <DownloadReceipt hid={inpObj.hiNo} />}
     </div>
   );
 }
