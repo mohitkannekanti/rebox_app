@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { downloadReceiptApi } from "../Api/Main.api";
 
 const DownloadReceipt = (props) => {
-  console.log("props", props);
   const hid = props.hid;
   const [paymentDate, setPaymentDate] = useState(new Date());
   const [paidStatus, setPaidStatus] = useState("");
@@ -36,10 +35,8 @@ const DownloadReceipt = (props) => {
     let reqObj = {
       hid: hid,
     };
-    console.log(reqObj);
     downloadReceiptApi(reqObj)
       .then(async (res) => {
-        console.log(res, "res");
         if (res.code === 1000) {
           let data = res.result[0];
           setInptObj({
@@ -71,7 +68,6 @@ const DownloadReceipt = (props) => {
         console.error(err);
       });
   };
-  console.log("inpObj", inpObj);
 
   return (
     <div id="downloadContent" className="">

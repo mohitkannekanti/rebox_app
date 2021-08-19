@@ -13,7 +13,6 @@ import html2canvas from "html2canvas";
 function PaymentDetails(props) {
   const [paidStatus, setPaidStatus] = useState(" ");
   const [paymentDate, setPaymentDate] = useState("");
-  const [downloadReceiptStatus, setDownloadReceiptStatus] = useState(false);
   const [inpObj, setInptObj] = useState({
     hiNo: "",
     plotNo: "",
@@ -30,7 +29,6 @@ function PaymentDetails(props) {
   useEffect(() => {
     const data = props.location.state.data[0];
     if (data) {
-      console.log(data);
       setInptObj({
         ...inpObj,
         hiNo: data.hid,

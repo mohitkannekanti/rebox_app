@@ -152,8 +152,6 @@ function Details(props) {
 
   const clickForPdf = async () => {
     setDownloadReceipt(true);
-    console.log(downloadReceipt, "state");
-    await generatePdf();
   };
 
   const generatePdf = () => {
