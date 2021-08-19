@@ -59,22 +59,9 @@ const Search = (props) => {
     handleValidation();
   }, [inputObj]);
 
-  /*  useEffect(() => {
-    if (otpValue != "" && otpValue != undefined) {
-      setOtpSubmitDisable(false);
-    } else {
-      setOtpSubmitDisable(true);
-    }
-  }, [otpValue]); */
-
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputObj({ ...inputObj, search: value });
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    handleSearch();
   };
 
   const handleOtpModalOpen = (e) => {
@@ -89,12 +76,13 @@ const Search = (props) => {
 
         if (res.code === 1000) {
           let otp = res.result[0].otp;
-          alert("otp is " + " " + otp);
+
           setResData({
             ...resData,
             phone_number: res.result[0].phone_number,
             otp: res.result[0].otp,
           });
+          alert("otp is " + " " + otp);
 
           setOtpModal(true);
           setSnackBarObj({
@@ -102,15 +90,10 @@ const Search = (props) => {
             title: "success",
             message: "OTP Sent to Registered Phone Number",
           });
-        } else {
-          setSnackBarObj({
-            open: !setSnackBarObj.open,
-            title: "error",
-            message: "No Data Found",
-          });
         }
       })
       .catch((err) => {
+        setOtpModal(false);
         setSnackBarObj({
           open: !setSnackBarObj.open,
           title: "error",
@@ -120,11 +103,11 @@ const Search = (props) => {
   };
   const handleOtpValue = (otp) => {
     setOtpValue(otp);
-    handleSearch();
   };
 
-  const handleSearch = () => {
-    if (otpValue == resData.otp) {
+  const handleSearch = (e) => {
+    let otp = otpValue;
+    if (otp === resData.otp) {
       setIsLoading(true);
       let checkReqObj = {
         mobilenumber: resData.phone_number,
@@ -150,8 +133,8 @@ const Search = (props) => {
               pathname: `/details`,
               state: { data: result },
             });
-            // window.location.href = "/details";
           } else {
+            setOtpModal(false);
             setSnackBarObj({
               open: !setSnackBarObj.open,
               title: "error",
@@ -166,6 +149,15 @@ const Search = (props) => {
             message: "Something Wrong. Please Try again",
           });
         });
+    } else {
+      setOtpModal(false);
+      setSnackBarObj({
+        open: !setSnackBarObj.open,
+        title: "error",
+        message: "Invalid OTP. Please Try again",
+      });
+      setInputObj("");
+      setOtpValue("");
     }
   };
 
@@ -191,7 +183,7 @@ const Search = (props) => {
           handleLoaderClose={handleClose}
         ></CustomLoader>
       ) : (
-        <form onSubmit={handleOtpValue}>
+        <form>
           <Grid
             container
             direction="row"
@@ -282,7 +274,7 @@ const Search = (props) => {
             <Button
               variant="contained"
               className="btn btn-primary btn-small"
-              onClick={handleSearch}
+              onClick={(e) => handleSearch()}
               /* className={`btn btn-small ${
                 otpSubmitDisable ? "btn-disable" : "btn-primary"
               }`} */

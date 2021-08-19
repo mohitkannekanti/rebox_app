@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(2, 4, 3),
     outline: 0,
-    width: 250,
+    width: "auto",
   },
 }));
 
@@ -44,22 +44,7 @@ export default function CustomModal({
         }}
       >
         <Fade in={handleOpen}>
-          <div className={classes.paper}>
-            {children}
-            {/*  <div className="modal-header">
-              <h4 className="text-primary">{modalTitle}</h4>
-              <span className="close-icon" onClick={handleClose}>
-                <CloseIcon />
-              </span>
-            </div>
-            <div className="modal-body">{children}</div>
- */}
-            {/* <div className="modal-footer">
-              <Button variant="contained" className="btn btn-primary btn-small">
-                {btnValue}
-              </Button>
-            </div> */}
-          </div>
+          <div className={classes.paper}>{children}</div>
         </Fade>
       </Modal>
     </>

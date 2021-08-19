@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button, Typography } from "@material-ui/core";
-import CustomModal from "./Custom/Modal";
+import CustomModal from "./Custom/CustomModal";
 import CustomLoader from "./Custom/CustomLoader";
 import * as master from "../Api/MasterData.api";
 import { updatePropertyStatusApi } from "../Api/Main.api";
@@ -8,8 +8,8 @@ import CustomSnackbar from "./Custom/CustomSnackbar";
 import { useHistory } from "react-router-dom";
 import jsPDF, { jsPDF as JsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import Logo from "../Images/Logo";
 import DownloadReceipt from "./DownloadReceipt";
+import CloseIcon from "@material-ui/icons/Close";
 
 function Details(props) {
   const [paidStatus, setPaidStatus] = useState("");
@@ -44,11 +44,11 @@ function Details(props) {
     grandTotal: " ",
     amountPaid: " ",
     transactionRefNo: " ",
+    mandal: "",
   });
   useEffect(() => {
     const data = props.location.state.data;
     if (data) {
-      console.log("data", data);
       setInptObj({
         ...inpObj,
         hiNo: data.hid,
@@ -69,6 +69,7 @@ function Details(props) {
         grandTotal: data.grand_total,
         mobileNumber: data.phone_number,
         transactionRefNo: data.transaction_reference_number,
+        mandal: data.mandal_name,
       });
       setPaidStatus(data.payment_status_name);
       setPaymentDate(data.payment_date);
@@ -80,11 +81,11 @@ function Details(props) {
   };
 
   useEffect(() => {
-    getMasterData();
+    // getMasterData();
     handleClose();
   }, []);
 
-  const getMasterData = () => {
+  /*  const getMasterData = () => {
     master
       .getMasterDataApi()
       .then(async (res) => {})
@@ -92,11 +93,9 @@ function Details(props) {
         // alert(err.message);
         console.log(err, "err");
       });
-  };
+  }; */
   const handlePaymentRedirect = (e) => {
     paymentDataUpdate();
-
-    // window.location.href = "/success";
   };
 
   const paymentDataUpdate = () => {
@@ -145,50 +144,53 @@ function Details(props) {
     setPaymentDialogOpen(false);
   };
   const handleClose = () => {
+    setDownloadReceipt(false);
     setTimeout(function () {
       setIsLoading(false);
     }, 5000);
   };
 
-  const clickForPdf = () => {
+  const clickForPdf = async () => {
     setDownloadReceipt(true);
-    generatePdf();
+    console.log(downloadReceipt, "state");
+    await generatePdf();
   };
 
   const generatePdf = () => {
-    const divToDisplay = document.getElementById("downloadContent");
-    console.log(divToDisplay, "div");
-    if (divToDisplay != null) {
-      html2canvas(divToDisplay).then((canvas) => {
-        const dataURL = canvas.toDataURL();
-        const pdf = new jsPDF("p", "mm", "a4");
-        pdf.addImage(dataURL, "PNG", -40, 0, 0, 0);
-        const pageCount = pdf.internal.getNumberOfPages();
+    if (downloadReceipt != false) {
+      const divToDisplay = document.getElementById("downloadContent");
+      if (divToDisplay != null) {
+        html2canvas(divToDisplay).then((canvas) => {
+          const dataURL = canvas.toDataURL();
+          const pdf = new jsPDF("p", "mm", "a4");
+          pdf.addImage(dataURL, "PNG", 45, 0, 0, 0);
+          const pageCount = pdf.internal.getNumberOfPages();
 
-        // For each page, print the page number and the total pages
-        for (var i = 1; i <= pageCount; i++) {
-          pdf.setPage(i);
-          pdf.addFont("ArialMS", "Arial", "normal");
-          pdf.setFont("Arial");
-          pdf.setFontSize(10);
-          pdf.text(
-            "This is an auto generated receipt. Do not require any signature",
-            50,
-            270,
-            null,
-            null
-          );
-          pdf.text(
-            "For any Queries. Reach out spport@rebox.com",
-            50,
-            275,
-            null,
-            null
-          );
-        }
-        setDownloadReceipt(false);
-        pdf.save(inpObj.hiNo + "_Receipt" + `.pdf`);
-      });
+          // For each page, print the page number and the total pages
+          for (var i = 1; i <= pageCount; i++) {
+            pdf.setPage(i);
+            pdf.addFont("ArialMS", "Arial", "normal");
+            pdf.setFont("Arial");
+            pdf.setFontSize(10);
+            pdf.text(
+              "This is an auto generated receipt. Do not require any signature",
+              50,
+              270,
+              null,
+              null
+            );
+            pdf.text(
+              "For any Queries. Reach out spport@rebox.com",
+              50,
+              275,
+              null,
+              null
+            );
+          }
+          setDownloadReceipt(false);
+          pdf.save(inpObj.hiNo + "_Receipt" + `.pdf`);
+        });
+      }
     }
   };
 
@@ -311,7 +313,7 @@ function Details(props) {
           >
             {paidStatus && paidStatus == "Paid" ? (
               <Button className="btn btn-due btn-medium" onClick={clickForPdf}>
-                Download Receipt
+                Print Receipt
               </Button>
             ) : (
               <Button
@@ -324,7 +326,88 @@ function Details(props) {
           </Grid>
         </div>
       )}
-      {downloadReceipt && <DownloadReceipt hid={inpObj.hiNo} />}
+
+      {downloadReceipt && (
+        <CustomModal
+          handleOpen={downloadReceipt}
+          // btnValue="Submit"
+        >
+          <div className="modal-header">
+            <h4 className="text-secondary">Receipt Format</h4>
+            <span className="close-icon" onClick={handleClose}>
+              <CloseIcon />
+            </span>
+          </div>
+          <div className="modal-body">
+            <div id="downloadContent" className="">
+              <div className="text-center">
+                <img src="logo.png" height={80} width={80} />
+              </div>
+              <div className="receipt-format">
+                <h3 className="text-center">Receipt</h3>
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>HIN No.</th>
+                      <td>{inpObj.hiNo}</td>
+                    </tr>
+                    <tr>
+                      <th>Name of the Owner</th>
+                      <td>{inpObj.ownerName}</td>
+                    </tr>
+                    <tr>
+                      <th>Mobile Number</th>
+                      <td>{inpObj.mobileNumber}</td>
+                    </tr>
+                    <tr>
+                      <th>PTIN No</th>
+                      <td>{inpObj.ptinNo}</td>
+                    </tr>
+                    <tr>
+                      <th>House No</th>
+                      <td>{inpObj.houseNo}</td>
+                    </tr>
+                    <tr>
+                      <th>Plot No.</th>
+                      <td>{inpObj.plotNo}</td>
+                    </tr>
+                    <tr>
+                      <tr>
+                        <th>Mandal</th>
+                        <td>{inpObj.mandal}</td>
+                      </tr>
+                      <th>Payment Status</th>
+                      <td>{paidStatus}</td>
+                    </tr>
+                    <tr>
+                      <th>Transaction Reference No</th>
+                      <td>{inpObj.transactionRefNo}</td>
+                    </tr>
+                    <tr>
+                      <th>Payment Date</th>
+                      <td>{paymentDate}</td>
+                    </tr>
+                    <tr>
+                      <th>Grand Total</th>
+                      <td>{inpObj.grandTotal}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="modal-footer">
+            <Button
+              variant="contained"
+              className="btn btn-primary btn-medium"
+              onClick={(e) => generatePdf()}
+              type="submit"
+            >
+              Download Receipt
+            </Button>
+          </div>
+        </CustomModal>
+      )}
     </div>
   );
 }
