@@ -112,7 +112,7 @@ td:hover {
   cursor: pointer;
 }
 #downloadContent {
-  padding: 70px;
+  /* padding: 70px; */
 }
 .receipt-format {
   /* font-size: 14px !important; */
@@ -125,8 +125,8 @@ td:hover {
 .d-none {
   display: none;
 }
-.receipt-format table {
-  width: auto;
+.receipt-format {
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -185,7 +185,9 @@ td:hover {
     padding: 20px;
   }
   #downloadContent {
-    padding: 20px;
     font-size: 12px;
+  }
+  .receipt-format {
+    width: auto;
   }
 }

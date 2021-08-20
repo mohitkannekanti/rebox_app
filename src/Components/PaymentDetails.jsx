@@ -93,7 +93,7 @@ function PaymentDetails(props) {
     <div className="paymentDetails-pane">
       <Grid container spacing={2} className="text-center">
         <div className="box">
-          <Grid item xs={12}>
+          <Grid item xs={12} className="mb-30">
             <Typography
               className=" text-center text-primary"
               variant="h5"
@@ -102,8 +102,8 @@ function PaymentDetails(props) {
               Payment Details
             </Typography>
           </Grid>
-          <Grid xs={12} id="downloadContent">
-            <div className="receipt-format">
+          <Grid xs={12}>
+            <div>
               {/* {downloadReceiptStatus && downloadReceiptStatus ? (
                 <div className="text-center">
                   <img src="logo.png" height={80} width={80} />
@@ -113,7 +113,7 @@ function PaymentDetails(props) {
                 ""
               )} */}
 
-              <table>
+              <table id="downloadContent" className="receipt-format">
                 <tbody>
                   <tr>
                     <th>HIN No.</th>

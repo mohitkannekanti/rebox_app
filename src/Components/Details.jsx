@@ -370,10 +370,10 @@ function Details(props) {
                       <td>{inpObj.plotNo}</td>
                     </tr>
                     <tr>
-                      <tr>
-                        <th>Mandal</th>
-                        <td>{inpObj.mandal}</td>
-                      </tr>
+                      <th>Mandal</th>
+                      <td>{inpObj.mandal}</td>
+                    </tr>
+                    <tr>
                       <th>Payment Status</th>
                       <td>{paidStatus}</td>
                     </tr>
