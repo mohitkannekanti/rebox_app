@@ -92,6 +92,9 @@ h5 {
 .btn-small {
   width: 100px !important;
 }
+.btn-readOnly {
+  cursor: default !important;
+}
 .form-input {
   margin-top: 30px !important;
 }
@@ -126,7 +129,6 @@ td:hover {
   display: none;
 }
 .receipt-format {
-  width: 50%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -176,6 +178,10 @@ td:hover {
 }
 
 @media only screen and (max-width: 600px) {
+  h5 {
+    font-size: 20px !important;
+  }
+
   .btn-medium {
     width: 100% !important;
   }
@@ -188,6 +194,7 @@ td:hover {
     font-size: 12px;
   }
   .receipt-format {
+    font-size: 9px !important;
     width: auto;
   }
 }

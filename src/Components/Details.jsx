@@ -230,11 +230,13 @@ function Details(props) {
                     <th>Payment Status</th>
                     <td>
                       {paidStatus && paidStatus == "Paid" ? (
-                        <Button className="btn btn-primary btn-medium">
+                        <Button className="btn btn-primary btn-medium" disabled>
                           PAID
                         </Button>
                       ) : (
-                        <Button className="btn btn-due btn-medium">DUE</Button>
+                        <Button className="btn btn-due btn-medium" disabled>
+                          DUE
+                        </Button>
                       )}
                     </td>
                   </tr>
