@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Button, Typography } from "@material-ui/core";
+import {
+  Grid,
+  Button,
+  Typography,
+  TextField,
+  InputAdornment,
+} from "@material-ui/core";
 import CustomModal from "./Custom/CustomModal";
 import CustomLoader from "./Custom/CustomLoader";
 import * as master from "../Api/MasterData.api";
@@ -8,14 +14,30 @@ import CustomSnackbar from "./Custom/CustomSnackbar";
 import { useHistory } from "react-router-dom";
 import jsPDF, { jsPDF as JsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import DownloadReceipt from "./DownloadReceipt";
 import CloseIcon from "@material-ui/icons/Close";
+import axios from "axios";
+
+const loadScript = (src) => {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = () => {
+      resolve(true);
+    };
+    script.onerror = () => {
+      resolve(false);
+    };
+    document.body.appendChild(script);
+  });
+};
+
+const __DEV__ = document.domain === "localhost";
 
 function Details(props) {
   const [paidStatus, setPaidStatus] = useState("");
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [paymentDate, setPaymentDate] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const [downloadReceipt, setDownloadReceipt] = useState(false);
   const [snackBarObj, setSnackBarObj] = useState({
@@ -46,6 +68,7 @@ function Details(props) {
     transactionRefNo: " ",
     mandal: "",
   });
+  const [amount, setAmount] = useState("");
   useEffect(() => {
     const data = props.location.state.data;
     if (data) {
@@ -81,73 +104,140 @@ function Details(props) {
   };
 
   useEffect(() => {
-    // getMasterData();
     handleClose();
   }, []);
 
-  /*  const getMasterData = () => {
-    master
-      .getMasterDataApi()
-      .then(async (res) => {})
-      .catch((err) => {
-        // alert(err.message);
-        console.log(err, "err");
-      });
-  }; */
-  const handlePaymentRedirect = (e) => {
-    paymentDataUpdate();
-  };
-
-  const paymentDataUpdate = () => {
-    let transactionReference = new Date().valueOf();
-    let updateData = {
-      hid: inpObj.hiNo,
-      payment_status_id: "5",
-      transaction_reference: transactionReference,
-    };
-    updatePropertyStatusApi(updateData)
-      .then(async (res) => {
-        if (res.code === 1004) {
-          setSnackBarObj({
-            open: !setSnackBarObj.open,
-            title: "success",
-            message: "Payment Done Success",
-          });
-          let result = res.result;
-          history.push({
-            pathname: `/success`,
-            state: { data: result },
-          });
-        } else {
-          setSnackBarObj({
-            open: !setSnackBarObj.open,
-            title: "warning",
-            message: "Payment Failed",
-          });
-        }
-      })
-      .catch((err) => {
-        // alert(err.message);
-        setSnackBarObj({
-          open: !setSnackBarObj.open,
-          title: "success",
-          message: "Something Wrong. Please Try Again",
-        });
-        console.error(err, "err");
-      });
-  };
-
-  const handlePaymentModalOpen = () => {
+  const openPaymentModal = () => {
     setPaymentDialogOpen(true);
   };
-  const handlePaymentModalClose = () => {
-    setPaymentDialogOpen(false);
+
+  const handleAmtChange = (e) => {
+    const amt = e.target.value;
+    setAmount(amt);
   };
+
+  // RazorPay Integration
+  async function displayRazorpay(amt) {
+    const amountValue = amt * 100;
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
+    }
+    console.log(res, "res");
+
+    const data = await fetch("http://localhost:1337/order", {
+      method: "POST",
+    }).then((t) => t.json());
+
+    console.log(data, "data");
+    const img = <img src="logo.png" />;
+    const options = {
+      key: __DEV__ ? "rzp_test_WbzJOjvLPnZizO" : "PRODUCTION_KEY",
+      currency: data.currency,
+      amount: data.amount.toString(),
+      order_id: data.id,
+      name: "Amount Paid",
+      description: `Complete the payment process for  ${inpObj.hiNo}`,
+      image: img,
+      handler: function (response) {
+        setInptObj({
+          ...inpObj,
+          transactionRefNo: response.razorpay_payment_id,
+        });
+        let updateData = {
+          hid: inpObj.hiNo,
+          payment_status_id: "5",
+          transaction_reference: response.razorpay_payment_id,
+        };
+        updatePropertyStatusApi(updateData)
+          .then(async (res) => {
+            if (res.code === 1004) {
+              setSnackBarObj({
+                open: !setSnackBarObj.open,
+                title: "success",
+                message: "Payment Done Success",
+              });
+              let result = res.result;
+              history.push({
+                pathname: `/success`,
+                state: { data: result },
+              });
+            } else {
+              setSnackBarObj({
+                open: !setSnackBarObj.open,
+                title: "warning",
+                message: "Payment Failed",
+              });
+            }
+          })
+          .catch((err) => {
+            setSnackBarObj({
+              open: !setSnackBarObj.open,
+              title: "error",
+              message: "Something Wrong. Please Try Again",
+            });
+            console.error(err, "err");
+          });
+      },
+      prefill: {
+        name: inpObj.ownerName,
+        email: "rebox@test.com",
+        phone_number: inpObj.mobileNumber,
+      },
+    };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  }
+
+  /*  const displayRazorpay = (amt) => {
+    var amount = amt * 100; //Razorpay consider the amount in paise
+    console.log(amount, "amount");
+
+    var options = {
+      key: __DEV__ ? "rzp_test_WbzJOjvLPnZizO" : "PRODUCTION_KEY",
+      amount: 0, // 2000 paise = INR 20, amount in paisa
+      name: "Urban Rebox",
+      order_id: "",
+      handler: function (response) {
+        console.log(response, "response");
+        var values = {
+          razorpay_signature: response.razorpay_signature,
+          razorpay_order_id: response.razorpay_order_id,
+          transactionid: response.razorpay_payment_id,
+          transactionamount: amount,
+        };
+        axios
+          .post("http://localhost:1337/payment", values)
+          .then((res) => {
+            alert("Success");
+          })
+          .catch((e) => console.log(e));
+      },
+      theme: {
+        color: "#528ff0",
+      },
+    };
+
+    axios
+      .post("http://localhost:1337/order", { amount: amount })
+      .then((res) => {
+        options.order_id = res.data.id;
+        options.amount = res.data.amount;
+        console.log(options);
+        var rzp1 = new window.Razorpay(options);
+        rzp1.open();
+      })
+      .catch((e) => console.log(e));
+  }; */
+
   const handleClose = () => {
     setDownloadReceipt(false);
-    setTimeout(function () {
-      setIsLoading(false);
-    }, 5000);
+    setPaymentDialogOpen(false);
+    setDownloadReceipt(false);
   };
 
   const clickForPdf = async () => {
@@ -318,7 +408,7 @@ function Details(props) {
             ) : (
               <Button
                 className="btn btn-primary btn-medium"
-                onClick={handlePaymentRedirect}
+                onClick={displayRazorpay}
               >
                 Click To Pay
               </Button>
@@ -330,6 +420,7 @@ function Details(props) {
       {downloadReceipt && (
         <CustomModal
           handleOpen={downloadReceipt}
+          handleClose={handleClose}
           // btnValue="Submit"
         >
           <div className="modal-header">
@@ -406,6 +497,31 @@ function Details(props) {
               Download Receipt
             </Button>
           </div>
+        </CustomModal>
+      )}
+      {paymentDialogOpen && (
+        <CustomModal handleOpen={paymentDialogOpen} handleClose={handleClose}>
+          <div className="modal-body">
+            <TextField
+              id="amount"
+              name="amount"
+              placeholder="Enter Amount in (₹)"
+              onChange={handleAmtChange}
+              className="form-input"
+              type="number"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">₹</InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <Button
+            className="btn btn-primary btn-medium"
+            onClick={displayRazorpay(amount)}
+          >
+            Submit
+          </Button>
         </CustomModal>
       )}
     </div>

@@ -60,6 +60,7 @@ function AdminDashboard(props) {
     { title: "Total tax arrears", field: "total_tax_arrears" },
     { title: "Total tax Current", field: "total_tax_present" },
     { title: "Amount (in ₹)", field: "grand_total" },
+    { title: "Transaction Ref No.", field: "transaction_reference_number" },
     {
       title: "Payment Date",
       field: "payment_date",
