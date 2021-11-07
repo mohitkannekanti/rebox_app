@@ -9,8 +9,10 @@ import {
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import moment from "moment";
 
 function PaymentDetails(props) {
+  console.log(props.location.state.data, "props");
   const [paidStatus, setPaidStatus] = useState(" ");
   const [paymentDate, setPaymentDate] = useState("");
   const [inpObj, setInptObj] = useState({
@@ -27,7 +29,8 @@ function PaymentDetails(props) {
   });
 
   useEffect(() => {
-    const data = props.location.state.data[0];
+    const data = props.location.state.data;
+    console.log(data, "dataa");
     if (data) {
       setInptObj({
         ...inpObj,
@@ -43,7 +46,9 @@ function PaymentDetails(props) {
         mandal: data.mandal_name,
       });
       setPaidStatus(data.payment_status_name);
-      setPaymentDate(data.payment_date);
+      setPaymentDate(
+        moment(data.payment_date).format("MMMM Do YYYY, h:mm:ss a")
+      );
     }
   }, []);
 

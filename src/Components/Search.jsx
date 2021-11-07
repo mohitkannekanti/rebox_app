@@ -34,7 +34,6 @@ const Search = (props) => {
     phone_number: "",
     otp: "",
   });
-  const [otpSubmitDisable, setOtpSubmitDisable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [snackBarObj, setSnackBarObj] = useState({
     open: false,
@@ -66,8 +65,11 @@ const Search = (props) => {
 
   const handleOtpModalOpen = (e) => {
     e.preventDefault();
+    let inp = inputObj.search;
+    let hid = inp.toUpperCase();
+    console.log(hid, "hid");
     let reqObj = {
-      hid: inputObj.search,
+      hid: hid,
     };
     setIsLoading(true);
     hidSearchApi(reqObj)

@@ -16,6 +16,7 @@ import jsPDF, { jsPDF as JsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
+import moment from "moment";
 
 const loadScript = (src) => {
   return new Promise((resolve) => {
@@ -31,12 +32,10 @@ const loadScript = (src) => {
   });
 };
 
-const __DEV__ = document.domain === "localhost";
-
 function Details(props) {
   const [paidStatus, setPaidStatus] = useState("");
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
-  const [paymentDate, setPaymentDate] = useState(new Date());
+  const [paymentDate, setPaymentDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const [downloadReceipt, setDownloadReceipt] = useState(false);
@@ -68,7 +67,17 @@ function Details(props) {
     transactionRefNo: " ",
     mandal: "",
   });
-  const [amount, setAmount] = useState("");
+  const [payment_amount, setPaymentAmount] = useState("");
+  const [refund_id, setRefund_id] = useState("");
+  const [transcationRefNo, setTranscationRefNo] = useState("");
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
   useEffect(() => {
     const data = props.location.state.data;
     if (data) {
@@ -94,11 +103,13 @@ function Details(props) {
         transactionRefNo: data.transaction_reference_number,
         mandal: data.mandal_name,
       });
+      setTranscationRefNo(data.transaction_reference_number);
       setPaidStatus(data.payment_status_name);
-      setPaymentDate(data.payment_date);
+      setPaymentDate(
+        moment(data.payment_date).format("MMMM Do YYYY, h:mm:ss a")
+      );
     }
   }, []);
-
   const closeSnackBar = () => {
     setSnackBarObj({ open: !setSnackBarObj.open, title: "", message: "" });
   };
@@ -107,133 +118,88 @@ function Details(props) {
     handleClose();
   }, []);
 
-  const openPaymentModal = () => {
-    setPaymentDialogOpen(true);
-  };
-
-  const handleAmtChange = (e) => {
-    const amt = e.target.value;
-    setAmount(amt);
-  };
-
-  // RazorPay Integration
-  async function displayRazorpay(amt) {
-    const amountValue = amt * 100;
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-
-    if (!res) {
-      alert("Razorpay SDK failed to load. Are you online?");
-      return;
-    }
-    console.log(res, "res");
-
-    const data = await fetch("http://localhost:1337/order", {
-      method: "POST",
-    }).then((t) => t.json());
-
-    console.log(data, "data");
-    const img = <img src="logo.png" />;
+  const paymentHandler = (e) => {
+    let RAZOR_PAY_TEST_KEY = "rzp_test_6LncqgGJOWnpXg";
+    let grandTotal = parseInt(inpObj.grandTotal);
+    e.preventDefault();
     const options = {
-      key: __DEV__ ? "rzp_test_WbzJOjvLPnZizO" : "PRODUCTION_KEY",
-      currency: data.currency,
-      amount: data.amount.toString(),
-      order_id: data.id,
-      name: "Amount Paid",
-      description: `Complete the payment process for  ${inpObj.hiNo}`,
-      image: img,
-      handler: function (response) {
-        setInptObj({
-          ...inpObj,
-          transactionRefNo: response.razorpay_payment_id,
-        });
-        let updateData = {
-          hid: inpObj.hiNo,
-          payment_status_id: "5",
-          transaction_reference: response.razorpay_payment_id,
-        };
-        updatePropertyStatusApi(updateData)
-          .then(async (res) => {
-            if (res.code === 1004) {
-              setSnackBarObj({
-                open: !setSnackBarObj.open,
-                title: "success",
-                message: "Payment Done Success",
-              });
-              let result = res.result;
-              history.push({
-                pathname: `/success`,
-                state: { data: result },
-              });
-            } else {
-              setSnackBarObj({
-                open: !setSnackBarObj.open,
-                title: "warning",
-                message: "Payment Failed",
-              });
-            }
+      key: RAZOR_PAY_TEST_KEY,
+      amount: grandTotal * 100,
+      name: "Payments",
+      description: "Payments",
+      handler(response) {
+        const paymentId = response.razorpay_payment_id;
+        const url =
+          process.env.URL +
+          "/api/v1/rzp_capture/" +
+          paymentId +
+          "/" +
+          payment_amount;
+        // Using my server endpoints to capture the payment
+        fetch(url, {
+          method: "get",
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          },
+        })
+          .then((resp) => resp.json())
+          .then(function (data) {
+            console.log("Request succeeded with JSON response", data);
+            setRefund_id(response.razorpay_payment_id);
+            updatePropertyStatus(paymentId);
           })
-          .catch((err) => {
-            setSnackBarObj({
-              open: !setSnackBarObj.open,
-              title: "error",
-              message: "Something Wrong. Please Try Again",
-            });
-            console.error(err, "err");
+          .catch(function (error) {
+            console.log("Request failed", error);
+            updatePropertyStatus(paymentId);
           });
       },
       prefill: {
         name: inpObj.ownerName,
-        email: "rebox@test.com",
-        phone_number: inpObj.mobileNumber,
+        mobileNumber: inpObj.mobileNumber,
+        email: "info@rebox.in",
       },
     };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  }
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
 
-  /*  const displayRazorpay = (amt) => {
-    var amount = amt * 100; //Razorpay consider the amount in paise
-    console.log(amount, "amount");
-
-    var options = {
-      key: __DEV__ ? "rzp_test_WbzJOjvLPnZizO" : "PRODUCTION_KEY",
-      amount: 0, // 2000 paise = INR 20, amount in paisa
-      name: "Urban Rebox",
-      order_id: "",
-      handler: function (response) {
-        console.log(response, "response");
-        var values = {
-          razorpay_signature: response.razorpay_signature,
-          razorpay_order_id: response.razorpay_order_id,
-          transactionid: response.razorpay_payment_id,
-          transactionamount: amount,
-        };
-        axios
-          .post("http://localhost:1337/payment", values)
-          .then((res) => {
-            alert("Success");
-          })
-          .catch((e) => console.log(e));
-      },
-      theme: {
-        color: "#528ff0",
-      },
+  const updatePropertyStatus = (paymentId) => {
+    let updObj = {
+      hid: inpObj.hiNo,
+      payment_status_id: 5,
+      transaction_reference: paymentId,
     };
-
-    axios
-      .post("http://localhost:1337/order", { amount: amount })
-      .then((res) => {
-        options.order_id = res.data.id;
-        options.amount = res.data.amount;
-        console.log(options);
-        var rzp1 = new window.Razorpay(options);
-        rzp1.open();
+    updatePropertyStatusApi(updObj)
+      .then(async (res) => {
+        setIsLoading(false);
+        if (res.code === 1004) {
+          let result = res.result[0];
+          setSnackBarObj({
+            open: !setSnackBarObj.open,
+            title: "success",
+            message: "Updated Data",
+          });
+          history.push({
+            pathname: `/success`,
+            state: { data: result },
+          });
+        } else {
+          setSnackBarObj({
+            open: !setSnackBarObj.open,
+            title: "error",
+            message: "Invalid",
+          });
+        }
       })
-      .catch((e) => console.log(e));
-  }; */
-
+      .catch((err) => {
+        setSnackBarObj({
+          open: !setSnackBarObj.open,
+          title: "error",
+          message: "Error",
+        });
+        console.error(err, "err");
+      });
+  };
   const handleClose = () => {
     setDownloadReceipt(false);
     setPaymentDialogOpen(false);
@@ -280,6 +246,19 @@ function Details(props) {
         });
       }
     }
+    setTimeout(function () {
+      window.location = "/";
+    }, 10000);
+  };
+
+  const handleAmtChange = (e) => {
+    const value = e.target.value;
+    setPaymentAmount(value);
+    console.log(value, "e");
+  };
+
+  const amtModal = () => {
+    setPaymentDialogOpen(true);
   };
 
   return (
@@ -408,7 +387,7 @@ function Details(props) {
             ) : (
               <Button
                 className="btn btn-primary btn-medium"
-                onClick={displayRazorpay}
+                onClick={paymentHandler}
               >
                 Click To Pay
               </Button>
@@ -505,6 +484,7 @@ function Details(props) {
             <TextField
               id="amount"
               name="amount"
+              type="number"
               placeholder="Enter Amount in (₹)"
               onChange={handleAmtChange}
               className="form-input"
@@ -518,7 +498,7 @@ function Details(props) {
           </div>
           <Button
             className="btn btn-primary btn-medium"
-            onClick={displayRazorpay(amount)}
+            onClick={paymentHandler}
           >
             Submit
           </Button>
